@@ -19,21 +19,26 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  Bar,
+  BarChart,
 } from "recharts";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
+import { BsDot } from "react-icons/bs";
 
 interface VideoData {
   title: string;
   views: number;
   thumbnail: string;
+  duration: string;
 }
 
 interface GraphData {
   name: string;
   views: number;
+  duration: number;
 }
 
-const VIDEOS_PER_PAGE = 8;
+const VIDEOS_PER_PAGE = 9;
 
 export default function Home() {
   const [playlistUrl, setPlaylistUrl] = useState("");
@@ -91,7 +96,7 @@ export default function Home() {
     <div className="container mx-auto p-4">
       <Card>
         <CardHeader>
-          <CardTitle>YouTube Playlist Analyzer</CardTitle>
+          <CardTitle>Generate YouTube Playlist Insights</CardTitle>
           <CardDescription>
             Enter a YouTube playlist URL to analyze its videos
           </CardDescription>
@@ -132,15 +137,19 @@ export default function Home() {
                     />
                     <div>
                       <h3 className="font-semibold">{video.title}</h3>
-                      <p className="text-sm text-gray-600">
-                        {formatViews(video.views)} views
+                      <p className="text-sm text-gray-600 flex flex-row">
+                        {formatViews(video.views)} views{" "}
+                        <span className="flex items-center justify-center">
+                          <BsDot className="text-black" />
+                        </span>
+                        {video.duration}
                       </p>
                     </div>
                   </li>
                 ))}
               </ul>
 
-              <div className="flex justify-between items-center mt-4">
+              <div className="flex justify-between items-center mt-8">
                 <Button
                   onClick={() =>
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
@@ -176,12 +185,12 @@ export default function Home() {
 
           <Card>
             <CardHeader>
-              <CardTitle>View Count Graph</CardTitle>
+              <CardTitle>View Count Graph (in thousand)</CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
+              <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={graphData}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="2 2" />
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
@@ -189,10 +198,25 @@ export default function Home() {
                   <Line
                     type="monotone"
                     dataKey="views"
-                    stroke="#8884d8"
+                    stroke="#ff7300"
                     activeDot={{ r: 8 }}
                   />
                 </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+            <CardHeader>
+              <CardTitle>Duration Graph (in seconds)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={graphData}>
+                  <CartesianGrid strokeDasharray="2 2" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="duration" fill="#8884d8" />
+                </BarChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>

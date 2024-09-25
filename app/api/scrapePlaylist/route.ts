@@ -6,11 +6,12 @@ interface VideoData {
   title: string;
   views: number;
   thumbnail: string;
+  duration: string;
 }
 
 interface PlaylistData {
   videoList: VideoData[];
-  graphData: { name: string; views: number }[];
+  graphData: { name: string; views: number; duration: number }[];
 }
 
 export async function POST(request: NextRequest) {
@@ -63,6 +64,11 @@ export async function POST(request: NextRequest) {
               el.querySelector("#video-info span")?.textContent?.trim() || "";
             const thumbnail = el.querySelector("img")?.src || "";
 
+            const duration =
+              el
+                .querySelector("badge-shape[aria-label]")
+                ?.getAttribute("aria-label") || "";
+
             const viewsMatch = viewsText.match(/^([\d,.]+[KMB]?)\s*views?$/i);
             let views = 0;
             if (viewsMatch) {
@@ -76,7 +82,7 @@ export async function POST(request: NextRequest) {
               else views = parseInt(viewString);
             }
 
-            return { title, views, thumbnail };
+            return { title, views, thumbnail, duration };
           });
         }
       );
@@ -100,10 +106,18 @@ export async function POST(request: NextRequest) {
     const results = await dataset.getData();
     const videos = (results.items[0]?.videos as VideoData[]) || [];
 
-    const graphData = videos.map((video, index) => ({
-      name: `Video ${index + 1}`,
-      views: video.views,
-    }));
+    const graphData = videos.map((video, index) => {
+      const match = video.duration.match(/(\d+)\s+minutes,\s+(\d+)\s+seconds/);
+      const durationInSeconds = match
+        ? parseInt(match[1]) * 60 + parseInt(match[2])
+        : 0;
+
+      return {
+        name: `Vid ${index + 1}`,
+        views: video.views,
+        duration: durationInSeconds,
+      };
+    });
 
     const playlistData: PlaylistData = {
       videoList: videos,
