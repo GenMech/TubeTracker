@@ -20,6 +20,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 
 interface VideoData {
   title: string;
@@ -32,11 +33,14 @@ interface GraphData {
   views: number;
 }
 
+const VIDEOS_PER_PAGE = 8;
+
 export default function Home() {
   const [playlistUrl, setPlaylistUrl] = useState("");
   const [videoData, setVideoData] = useState<VideoData[]>([]);
   const [graphData, setGraphData] = useState<GraphData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,6 +62,7 @@ export default function Home() {
       const data = await response.json();
       setVideoData(data.videoList);
       setGraphData(data.graphData);
+      setCurrentPage(1); // Reset to the first page when a new playlist is loaded
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -74,6 +79,13 @@ export default function Home() {
       return views.toString();
     }
   };
+
+  console.log("videos data:", videoData);
+
+  // Pagination Logic
+  const startIndex = (currentPage - 1) * VIDEOS_PER_PAGE;
+  const endIndex = startIndex + VIDEOS_PER_PAGE;
+  const paginatedVideos = videoData.slice(startIndex, endIndex);
 
   return (
     <div className="container mx-auto p-4">
@@ -108,15 +120,15 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <ul className="space-y-4">
-                {videoData.map((video, index) => (
+                {paginatedVideos.map((video, index) => (
                   <li key={index} className="flex items-start space-x-4">
                     <span className="font-bold text-lg min-w-[24px]">
-                      {index + 1}.
+                      {startIndex + index + 1}.
                     </span>
                     <img
-                      src={video.thumbnail}
+                      src={video.thumbnail || "/YouTube_logo.png"}
                       alt={video.title}
-                      className="w-24 h-auto"
+                      className="w-24 h-14"
                     />
                     <div>
                       <h3 className="font-semibold">{video.title}</h3>
@@ -127,6 +139,38 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
+
+              <div className="flex justify-between items-center mt-4">
+                <Button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className="flex gap-1"
+                >
+                  <GrFormPreviousLink /> <span>Previous</span>
+                </Button>
+
+                <span>
+                  Page {currentPage} of{" "}
+                  {Math.ceil(videoData.length / VIDEOS_PER_PAGE)}
+                </span>
+
+                <Button
+                  onClick={() =>
+                    setCurrentPage((prev) =>
+                      Math.min(
+                        prev + 1,
+                        Math.ceil(videoData.length / VIDEOS_PER_PAGE)
+                      )
+                    )
+                  }
+                  disabled={endIndex >= videoData.length}
+                  className="flex gap-1"
+                >
+                  <span>Next</span> <GrFormNextLink />
+                </Button>
+              </div>
             </CardContent>
           </Card>
 
