@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -42,7 +41,7 @@ interface GraphData {
 const VIDEOS_PER_PAGE = 9;
 
 export default function Home() {
-  const [playlistUrl, setPlaylistUrl] = useState("");
+  const [playlistUrl, setPlaylistUrl] = useState<string>("");
   const [videoData, setVideoData] = useState<VideoData[]>([]);
   const [graphData, setGraphData] = useState<GraphData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -104,11 +103,12 @@ export default function Home() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
+            <input
               type="url"
               placeholder="Enter YouTube playlist URL"
               value={playlistUrl}
               onChange={(e) => setPlaylistUrl(e.target.value)}
+              className="outline-none bg-white border border-black py-2 px-1 rounded-md w-full placeholder:text-base placeholder:text-fontlight placeholder:font-normal"
               required
             />
             <Button type="submit" disabled={isLoading}>
