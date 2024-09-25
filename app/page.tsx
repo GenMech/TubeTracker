@@ -24,6 +24,7 @@ import {
 } from "recharts";
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import { BsDot } from "react-icons/bs";
+import Image from "next/image";
 
 interface VideoData {
   title: string;
@@ -130,7 +131,7 @@ export default function Home() {
                     <span className="font-bold text-lg min-w-[24px]">
                       {startIndex + index + 1}.
                     </span>
-                    <img
+                    <Image
                       src={video.thumbnail || "/YouTube_logo.png"}
                       alt={video.title}
                       className="w-24 h-14"
