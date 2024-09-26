@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
+  images: {
+    domains: ["i.ytimg.com"],
+  },
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.externals.push(

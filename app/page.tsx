@@ -38,7 +38,7 @@ interface GraphData {
   duration: number;
 }
 
-const VIDEOS_PER_PAGE = 9;
+const VIDEOS_PER_PAGE = 8;
 
 export default function Home() {
   const [playlistUrl, setPlaylistUrl] = useState<string>("");
@@ -134,7 +134,9 @@ export default function Home() {
                     <Image
                       src={video.thumbnail || "/YouTube_logo.png"}
                       alt={video.title}
-                      className="w-24 h-14"
+                      // className="w-24 h-14"
+                      width={96}
+                      height={56}
                     />
                     <div>
                       <h3 className="font-semibold">{video.title}</h3>
