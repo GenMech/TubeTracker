@@ -6,6 +6,7 @@
 - Crawlee
 - Typescript
 - Recharts
+- Apify
 - Docker
 
 ## Getting Started
