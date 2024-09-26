@@ -38,3 +38,6 @@ next-env.d.ts
 apify_storage
 crawlee_storage
 storage
+# Added by Apify CLI
+node_modules
+.venv
