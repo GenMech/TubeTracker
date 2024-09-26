@@ -9,6 +9,9 @@
 - Apify
 - Docker
 
+## Snapshot
+![image](https://github.com/user-attachments/assets/5ffa3772-fc26-4375-903f-0406512c4522)
+
 ## Getting Started
 
 First, run the development server:
