@@ -119,7 +119,7 @@ export default function Home() {
       </Card>
 
       {videoData.length > 0 && (
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
           <Card>
             <CardHeader>
               <CardTitle>Video List</CardTitle>

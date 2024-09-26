@@ -41,3 +41,5 @@ storage
 # Added by Apify CLI
 node_modules
 .venv
+
+impLinks.txt
