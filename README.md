@@ -10,7 +10,7 @@
 - Docker
 
 ## Snapshot
-![image](https://github.com/user-attachments/assets/6e0a6267-88ab-49e8-886c-f2c0dace1fe0)
+![image](https://github.com/user-attachments/assets/3476c880-17a6-4e0f-91b7-3b788494c5cf)
 
 ## Getting Started
 
