@@ -24,6 +24,11 @@ import {
 import { GrFormNextLink, GrFormPreviousLink } from "react-icons/gr";
 import { BsDot } from "react-icons/bs";
 import Image from "next/image";
+import { TooltipProps } from "recharts";
+import {
+  ValueType,
+  NameType,
+} from "recharts/types/component/DefaultTooltipContent";
 
 interface VideoData {
   title: string;
@@ -85,6 +90,23 @@ export default function Home() {
     }
   };
 
+  const CustomTooltip = ({
+    active,
+    payload,
+    label,
+  }: TooltipProps<ValueType, NameType>) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`${label} : ${payload[0].value} views`}</p>
+          {/* <p className="desc">Anything you want can be displayed here.</p> */}
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   console.log("videos data:", videoData);
 
   // Pagination Logic
@@ -108,7 +130,7 @@ export default function Home() {
               placeholder="Enter YouTube playlist URL"
               value={playlistUrl}
               onChange={(e) => setPlaylistUrl(e.target.value)}
-              className="outline-none bg-white border border-black py-2 px-1 rounded-md w-full placeholder:text-base placeholder:text-fontlight placeholder:font-normal"
+              className="outline-none bg-white text-black border border-black py-2 px-1 rounded-md w-full placeholder:text-base placeholder:text-fontlight placeholder:font-normal"
               required
             />
             <Button type="submit" disabled={isLoading}>
@@ -143,7 +165,7 @@ export default function Home() {
                       <p className="text-sm text-gray-600 flex flex-row">
                         {formatViews(video.views)} views{" "}
                         <span className="flex items-center justify-center">
-                          <BsDot className="text-black" />
+                          <BsDot className="text-white" />
                         </span>
                         {video.duration}
                       </p>
@@ -188,15 +210,15 @@ export default function Home() {
 
           <Card>
             <CardHeader>
-              <CardTitle>View Count Graph (in thousand)</CardTitle>
+              <CardTitle>View Count Graph</CardTitle>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={graphData}>
-                  <CartesianGrid strokeDasharray="2 2" />
+                  {/* <CartesianGrid strokeDasharray="2 2" /> */}
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip />
+                  <Tooltip content={<CustomTooltip />} />
                   <Legend />
                   <Line
                     type="monotone"
@@ -216,7 +238,7 @@ export default function Home() {
                   <CartesianGrid strokeDasharray="2 2" />
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip />
+                  <Tooltip content={<CustomTooltip />} />
                   <Legend />
                   <Bar dataKey="duration" fill="#8884d8" />
                 </BarChart>
